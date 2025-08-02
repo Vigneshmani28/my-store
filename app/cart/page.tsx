@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { setCart, removeFromCart, clearCart } from "@/redux/cartSlice";
+import { setCart, removeFromCart, clearCart, updateQuantity } from "@/redux/cartSlice";
 import Link from "next/link";
 import {
   CheckCircle,
@@ -236,11 +236,31 @@ export default function CartPage() {
                     <p className="text-gray-600 mt-1">
                       ₹{item.price.toLocaleString()}
                     </p>
-                    <div className="mt-2 flex items-center">
-                      <span className="text-gray-700">
-                        Qty: {item.quantity}
-                      </span>
-                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+  <Button
+    variant="outline"
+    size="icon"
+    className="cursor-pointer"
+    onClick={() =>
+      item.quantity > 1 &&
+      dispatch(updateQuantity({ productId: item.productId, quantity: item.quantity - 1 }))
+    }
+  >
+    -
+  </Button>
+  <span className="w-8 text-center">{item.quantity}</span>
+  <Button
+    variant="outline"
+    className="cursor-pointer"
+    size="icon"
+    onClick={() =>
+      dispatch(updateQuantity({ productId: item.productId, quantity: item.quantity + 1 }))
+    }
+  >
+    +
+  </Button>
+</div>
+
                   </div>
                   <div className="sm:text-right font-medium">
                     ₹{(item.price * item.quantity).toLocaleString()}
